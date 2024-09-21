@@ -45,7 +45,7 @@ pre-commit install
 
 ## set up timescale
 
-this process follows the [timescale documentation](https://docs.timescale.com/tutorials/latest/financial-tick-data/financial-tick-dataset/)
+this process follows the [timescale documentation](https://docs.timescale.com/tutorials/latest/financial-tick-data/financial-tick-dataset)
 
 1. create a service on [timescale](https://console.cloud.timescale.com/) 
 1. save your credentials in the psql config file `~/.pg_service.conf` 
