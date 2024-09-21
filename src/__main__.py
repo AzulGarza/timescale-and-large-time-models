@@ -1,8 +1,8 @@
 import os
 
 import pandas as pd
-import psycopg2
 from dotenv import load_dotenv
+from sqlalchemy import create_engine
 
 load_dotenv()
 
@@ -13,12 +13,12 @@ def get_str_conn() -> str:
     host = os.getenv("TIMESCALE_HOST")
     port = os.getenv("TIMESCALE_PORT")
     dbname = os.getenv("TIMESCALE_DBNAME")
-    str_conn = f"postgresql://{username}:{password}@{host}:{port}/{dbname}"
+    str_conn = f"postgresql+psycopg2://{username}:{password}@{host}:{port}/{dbname}"
     return str_conn
 
 
 def read_data():
-    with psycopg2.connect(get_str_conn()) as conn:
+    with create_engine(get_str_conn()).connect() as conn:
         df = pd.read_sql_query(
             """
             SELECT symbol, bucket as date, open, high, low, close
@@ -33,6 +33,11 @@ def read_data():
         value_name="price",
     )
     return df
+
+
+def write_forecasts_df(df: pd.DataFrame):
+    with create_engine(get_str_conn()).connect() as conn:
+        df.to_sql("forecasts", conn, if_exists="append", index=False)
 
 
 if __name__ == "__main__":
