@@ -43,9 +43,6 @@ uv pip install -e .
 pre-commit install
 ```
 
-## ready to code  
-you're now all set to start building your project.
-
 ## set up timescale
 
 this process follows the [timescale documentation](https://docs.timescale.com/tutorials/latest/energy-data/dataset-energy/)
