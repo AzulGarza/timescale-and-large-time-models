@@ -1,45 +1,15 @@
 # timescale and large time models 
 > how to integrate large time models into timescale database 
 
-## setup & environment
+this project demonstrates how to integrate forecasts into a [Timescale database](https://docs.timescale.com/), using [TimeGPT](https://docs.nixtla.io/).
 
-this template is designed to streamline the setup of any python project. follow these steps to get started:
-
-### 1. install [`uv`](https://github.com/astral-sh/uv/)
-
-use `uv` to manage your virtual environments:
+## set up env
 
 ```bash
 pip install uv
-```
-
-### 2. create a virtual environment
-
-create an environment using python 3.10 (or your preferred version):
-
-```bash
 uv venv --python 3.10
-```
-
-### 3. activate the environment
-
-activate the virtual environment:
-
-```bash
 source .venv/bin/activate
-```
-
-### 4. install dependencies
-
-install all the required dependencies from the `requirements.txt` file:
-
-```bash
 uv pip install -e .
-```
-
-### 5. install pre-commits
-
-```bash
 pre-commit install
 ```
 
@@ -53,6 +23,8 @@ this process follows the [timescale documentation](https://docs.timescale.com/tu
 
 ```bash
 make populate_timescale project_id=<your project id>
+make create_materialized_view project_id=<your project id>
+make create_forecasts_table project_id=<your project id>
 ```
 
 > [!TIP]
