@@ -3,6 +3,7 @@ from contextlib import contextmanager
 
 import pandas as pd
 from dotenv import load_dotenv
+from nixtla import NixtlaClient
 from sqlalchemy import create_engine
 
 load_dotenv()
@@ -25,7 +26,7 @@ def timescale_conn():
         engine.dispose()
 
 
-def read_data():
+def read_data_from_timescale():
     with timescale_conn() as conn:
         df = pd.read_sql_query(
             """
@@ -40,17 +41,26 @@ def read_data():
         var_name="price_type",
         value_name="price",
     )
-    return df
+    df["unique_id"] = df["symbol"] + "__" + df["price_type"].astype(str)
+    return df[["unique_id", "date", "price"]]
 
 
-def write_forecasts(df: pd.DataFrame):
+def write_forecasts_to_timescale(df: pd.DataFrame):
+    df = df.rename(columns={"TimeGPT": "forecast"})
+    df[["symbol", "price_type"]] = df["unique_id"].str.split("__", expand=True)
+    df = df.drop(columns="unique_id")
     with timescale_conn() as conn:
         df.to_sql("forecasts", conn, if_exists="append", index=False)
 
 
+def forecasting_pipeline(h: int):
+    df = read_data_from_timescale()
+    nixtla = NixtlaClient()
+    fcst_df = nixtla.forecast(df, h=h, time_col="date", target_col="price", freq="D")
+    write_forecasts_to_timescale(fcst_df)
+
+
 if __name__ == "__main__":
-    df = read_data()
-    print(df.head())
-    # fcst_df = create_forecasts(df)
-    # print(fcst_df.head())
-    # write_forecasts(fcst_df)
+    import fire
+
+    fire.Fire(forecasting_pipeline)
