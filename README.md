@@ -1,5 +1,5 @@
-# python-project-template  
-> a simple template for organizing any python project.
+# timescale and large time models 
+> how to integrate large time models into timescale database 
 
 ## setup & environment
 
@@ -45,3 +45,20 @@ pre-commit install
 
 ## ready to code  
 you're now all set to start building your project.
+
+## set up timescale
+
+this process follows the [timescale documentation](https://docs.timescale.com/tutorials/latest/energy-data/dataset-energy/)
+
+1. create a service on [timescale](https://console.cloud.timescale.com/) 
+1. save your credentials in the psql config file `~/.pg_service.conf` 
+1. download the data and populate timescale using
+
+```bash
+make populate_timescale project_id=<your project id>
+```
+
+> [!TIP]
+> when you create a timescale service, you can download the psql config file.
+> also, you will be provided with a psql command such ass `psql -d <your project id>`.
+> that's your project id.
