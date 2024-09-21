@@ -6,6 +6,9 @@ download_data:
 populate_timescale: .require-project-id download_data 
 	@psql -d ${project_id} -f sql/create_tables.sql
 
+create_materialized_view: .require-project-id
+	@psql -d ${project_id} -f sql/create_materialized_view.sql
+
 .require-project-id:
 ifndef project_id
 	$(error "project_id is not defined")
