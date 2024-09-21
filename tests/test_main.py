@@ -1,6 +1,7 @@
 import pandas as pd
+from sqlalchemy import text
 
-from src.__main__ import read_data, write_forecasts_df
+from src.__main__ import read_data, timescale_conn, write_forecasts_df
 
 
 def test_read_data():
@@ -21,3 +22,13 @@ def test_write_forecasts_df():
         }
     )
     write_forecasts_df(df)
+    with timescale_conn() as conn:
+        df = pd.read_sql_query(
+            """
+            SELECT * FROM forecasts WHERE symbol = 'test_by_azul'
+            """,
+            conn,
+        )
+        assert len(df) == len_fcst_df
+        conn.execute(text("DELETE FROM forecasts WHERE symbol = 'test_by_azul'"))
+        conn.commit()
