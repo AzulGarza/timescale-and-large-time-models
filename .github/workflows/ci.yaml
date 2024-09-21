@@ -8,6 +8,13 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env: 
+      NIXTLA_API_KEY: ${{ secrets.NIXTLA_API_KEY }}
+      TIMESCALE_DBNAME: ${{ secrets.TIMESCALE_DBNAME }}
+      TIMESCALE_HOST: ${{ secrets.TIMESCALE_HOST }}
+      TIMESCALE_PASSWORD: ${{ secrets.TIMESCALE_PASSWORD }}
+      TIMESCALE_PORT: ${{ secrets.TIMESCALE_PORT }}
+      TIMESCALE_USERNAME: ${{ secrets.TIMESCALE_USERNAME }}
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
