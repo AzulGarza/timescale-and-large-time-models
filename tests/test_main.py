@@ -2,6 +2,7 @@ import pandas as pd
 from sqlalchemy import text
 
 from src.__main__ import (
+    forecasting_pipeline,
     read_data_from_timescale,
     timescale_conn,
     write_forecasts_to_timescale,
@@ -35,3 +36,7 @@ def test_write_forecasts_df():
         assert len(df) == len_fcst_df
         conn.execute(text("DELETE FROM forecasts WHERE symbol = 'test_by_azul'"))
         conn.commit()
+
+
+def test_forecasting_pipeline():
+    forecasting_pipeline(10)
