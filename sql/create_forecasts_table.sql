@@ -1,0 +1,5 @@
+CREATE TABLE forecasts (
+  symbol TEXT NOT NULL,
+  date TIMESTAMPTZ NOT NULL,
+  forecast DOUBLE PRECISION NOT NULL
+);
