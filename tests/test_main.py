@@ -1,7 +1,7 @@
 import pandas as pd
 from sqlalchemy import text
 
-from src.__main__ import read_data, timescale_conn, write_forecasts_df
+from src.__main__ import read_data, timescale_conn, write_forecasts
 
 
 def test_read_data():
@@ -21,7 +21,7 @@ def test_write_forecasts_df():
             "forecast": range(len_fcst_df),
         }
     )
-    write_forecasts_df(df)
+    write_forecasts(df)
     with timescale_conn() as conn:
         df = pd.read_sql_query(
             """

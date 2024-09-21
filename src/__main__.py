@@ -43,7 +43,7 @@ def read_data():
     return df
 
 
-def write_forecasts_df(df: pd.DataFrame):
+def write_forecasts(df: pd.DataFrame):
     with timescale_conn() as conn:
         df.to_sql("forecasts", conn, if_exists="append", index=False)
 
@@ -51,3 +51,6 @@ def write_forecasts_df(df: pd.DataFrame):
 if __name__ == "__main__":
     df = read_data()
     print(df.head())
+    # fcst_df = create_forecasts(df)
+    # print(fcst_df.head())
+    # write_forecasts(fcst_df)
