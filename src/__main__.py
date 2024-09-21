@@ -23,6 +23,11 @@ def read_data():
             """,
             conn,
         )
+    df = df.melt(
+        id_vars=["symbol", "date"],
+        var_name="price_type",
+        value_name="price",
+    )
     return df
 
 
