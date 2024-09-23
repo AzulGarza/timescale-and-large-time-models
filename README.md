@@ -1,4 +1,4 @@
-# timescale and large time models 
+# forecasting stock-trade data using timescale and large time models 
 > how to integrate large time models into timescale database 
 
 this project demonstrates how to integrate forecasts into a [Timescale database](https://docs.timescale.com/), using [TimeGPT](https://docs.nixtla.io/).
