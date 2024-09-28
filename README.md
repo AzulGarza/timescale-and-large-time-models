@@ -49,9 +49,12 @@ this process follows the [timescale documentation](https://docs.timescale.com/tu
 
 ```bash
 make create_twelvedata_table project_id=<your project id>
+make create_m_view_twelvedata project_id=<your project id>
+make create_f_table_twelvedata project_id=<your project id>
 ```
 
-1. forecast! 
+1. collect real time data, ingest it to timescale and forecast it in real time! 
 
 ```bash
+python forecast/real_time.py
 ```
