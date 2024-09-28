@@ -15,6 +15,9 @@ create_forecasts_table: .require-project-id
 create_twelvedata_table: .require-project-id
 	@psql -d ${project_id} -f sql/create_tables_twelvedata.sql
 
+create_m_view_twelvedata: .require-project-id
+	@psql -d ${project_id} -f sql/create_materialized_view_twelvedata.sql
+
 .require-project-id:
 ifndef project_id
 	$(error "project_id is not defined")
