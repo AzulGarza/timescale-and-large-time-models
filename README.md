@@ -27,6 +27,12 @@ make create_materialized_view project_id=<your project id>
 make create_forecasts_table project_id=<your project id>
 ```
 
+1. forecast! 
+
+```bash
+python forecast --h <your horizon>
+```
+
 > [!TIP]
 > when you create a timescale service, you can download the psql config file.
 > also, you will be provided with a psql command such ass `psql -d <your project id>`.

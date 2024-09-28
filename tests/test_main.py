@@ -1,7 +1,7 @@
 import pandas as pd
 from sqlalchemy import text
 
-from src.__main__ import (
+from forecast.__main__ import (
     forecasting_pipeline,
     read_data_from_timescale,
     timescale_conn,

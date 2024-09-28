@@ -10,7 +10,7 @@ requires-python = ">=3.8"
 
 [tool.coverage]
 branch = true
-source = ["src"]
+source = ["forecast"]
 
 [tool.coverage.run]
 omit = [
@@ -30,7 +30,7 @@ testpaths = ["tests"]
 [tool.ruff]
 fix = true
 line-length = 88
-src = ["src"]
+src = ["forecast"]
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -43,11 +43,11 @@ ignore = [
 ]
 
 [tool.ruff.lint.isort]
-known-local-folder = ["src"]
+known-local-folder = ["forecast"]
 no-lines-before = ["local-folder"]
 
 [tool.setuptools]
-packages = ["src"]
+packages = ["forecast"]
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
