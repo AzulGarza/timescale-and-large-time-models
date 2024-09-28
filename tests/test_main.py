@@ -10,7 +10,8 @@ from forecast.__main__ import (
 
 
 def test_read_data():
-    df = read_data_from_timescale()
+    with timescale_conn() as conn:
+        df = read_data_from_timescale(conn)
     assert df is not None
     assert len(df) > 0
     assert df.columns.tolist() == ["unique_id", "date", "price"]
@@ -25,8 +26,8 @@ def test_write_forecasts_df():
             "TimeGPT": range(len_fcst_df),
         }
     )
-    write_forecasts_to_timescale(df)
     with timescale_conn() as conn:
+        write_forecasts_to_timescale(conn, df)
         df = pd.read_sql_query(
             """
             SELECT * FROM forecasts WHERE symbol = 'test_by_azul'

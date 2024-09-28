@@ -1,5 +1,6 @@
 import os
 from contextlib import contextmanager
+from typing import Any
 
 import pandas as pd
 from dotenv import load_dotenv
@@ -26,16 +27,16 @@ def timescale_conn():
         engine.dispose()
 
 
-def read_data_from_timescale():
-    with timescale_conn() as conn:
-        df = pd.read_sql_query(
-            """
-            SELECT symbol, bucket as date, open, high, low, close
-            FROM one_day_candle
-            ORDER BY symbol, bucket DESC
-            """,
-            conn,
-        )
+def read_data_from_timescale(conn: Any, table: str = "one_day_candle"):
+    df = pd.read_sql_query(
+        f"""
+        SELECT symbol, bucket as date, open, high, low, close
+        FROM {table} 
+        ORDER BY symbol, bucket DESC
+        LIMIT 100
+        """,
+        conn,
+    )
     df = df.melt(
         id_vars=["symbol", "date"],
         var_name="price_type",
@@ -45,19 +46,23 @@ def read_data_from_timescale():
     return df[["unique_id", "date", "price"]]
 
 
-def write_forecasts_to_timescale(df: pd.DataFrame):
+def write_forecasts_to_timescale(conn: Any, df: pd.DataFrame, table: str = "forecasts"):
     df = df.rename(columns={"TimeGPT": "forecast"})
     df[["symbol", "price_type"]] = df["unique_id"].str.split("__", expand=True)
     df = df.drop(columns="unique_id")
-    with timescale_conn() as conn:
-        df.to_sql("forecasts", conn, if_exists="append", index=False)
+    df.to_sql(table, conn, if_exists="append", index=False)
+
+
+def _forecasting_pipeline(h: int, conn: Any):
+    df = read_data_from_timescale(conn)
+    nixtla = NixtlaClient()
+    fcst_df = nixtla.forecast(df, h=h, time_col="date", target_col="price", freq="D")
+    write_forecasts_to_timescale(conn, fcst_df)
 
 
 def forecasting_pipeline(h: int):
-    df = read_data_from_timescale()
-    nixtla = NixtlaClient()
-    fcst_df = nixtla.forecast(df, h=h, time_col="date", target_col="price", freq="D")
-    write_forecasts_to_timescale(fcst_df)
+    with timescale_conn() as conn:
+        _forecasting_pipeline(h, conn)
 
 
 if __name__ == "__main__":
