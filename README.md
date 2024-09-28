@@ -15,6 +15,13 @@ pre-commit install
 
 ## set up timescale
 
+> [!TIP]
+> when you create a timescale service, you can download the psql config file.
+> also, you will be provided with a psql command such ass `psql -d <your project id>`.
+> that's your project id.
+
+### finance tutorial part 1: loading and forecasting data on demand
+
 this process follows the [timescale documentation](https://docs.timescale.com/tutorials/latest/financial-tick-data/financial-tick-dataset)
 
 1. create a service on [timescale](https://console.cloud.timescale.com/) 
@@ -33,7 +40,18 @@ make create_forecasts_table project_id=<your project id>
 python forecast --h <your horizon>
 ```
 
-> [!TIP]
-> when you create a timescale service, you can download the psql config file.
-> also, you will be provided with a psql command such ass `psql -d <your project id>`.
-> that's your project id.
+### finance tutorial part 2: loading and forecasting real time data
+
+this process follows the [timescale documentation](https://docs.timescale.com/tutorials/latest/financial-ingest-real-time/)
+
+1. create a service on [timescale](https://console.cloud.timescale.com/) 
+1. save your credentials in the psql config file `~/.pg_service.conf` 
+
+```bash
+make create_twelvedata_table project_id=<your project id>
+```
+
+1. forecast! 
+
+```bash
+```
