@@ -53,18 +53,25 @@ def write_forecasts_to_timescale(conn: Any, df: pd.DataFrame, table: str = "fore
     df.to_sql(table, conn, if_exists="append", index=False)
 
 
-def _forecasting_pipeline(h: int, freq: str, conn: Any, add_fcd: bool):
-    df = read_data_from_timescale(conn)
+def _forecasting_pipeline(
+    conn: Any,
+    h: int,
+    freq: str,
+    add_fcd: bool,
+    read_table: str = "one_day_candle",
+    write_table: str = "forecasts",
+):
+    df = read_data_from_timescale(conn, table=read_table)
     nixtla = NixtlaClient()
     fcst_df = nixtla.forecast(df, h=h, time_col="date", target_col="price", freq=freq)
     if add_fcd:
         fcst_df["forecast_creation_date"] = pd.Timestamp.now()
-    write_forecasts_to_timescale(conn, fcst_df)
+    write_forecasts_to_timescale(conn, fcst_df, table=write_table)
 
 
 def forecasting_pipeline(h: int, freq: str = "D", add_fcd: bool = False):
     with timescale_conn() as conn:
-        _forecasting_pipeline(h, freq, conn, add_fcd)
+        _forecasting_pipeline(conn, h, freq, add_fcd)
 
 
 if __name__ == "__main__":
