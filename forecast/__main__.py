@@ -62,6 +62,8 @@ def _forecasting_pipeline(
     write_table: str = "forecasts",
 ):
     df = read_data_from_timescale(conn, table=read_table)
+    if df.empty:
+        raise ValueError("omggg, empty dataframe")
     nixtla = NixtlaClient()
     fcst_df = nixtla.forecast(df, h=h, time_col="date", target_col="price", freq=freq)
     if add_fcd:
